@@ -6,6 +6,9 @@ on:
     branches:
       - 'main'
 
+env:
+  DEPLOY_TO_DIGITAL_OCEAN: false
+
 concurrency: release
 
 jobs:
@@ -53,9 +56,10 @@ jobs:
       - name: Push Release Tag
         run: git push origin ${{env.RELEASE_VERSION}}
       - name: Deploy to Digital Ocean
+        if: ${{ env.DEPLOY_TO_DIGITAL_OCEAN }}
         uses: digitalocean/app_action@main
         with:
-          app_name: monkfish-app
+          app_name: ${{ secrets.DIGITALOCEAN_APP_NAME }}
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           images: '[
             {
