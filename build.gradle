@@ -20,3 +20,10 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// this will override ${} placeholders in build.properties file based on Gradle project's properties
+processResources {
+	filesMatching("build.properties") {
+		expand(project.properties)
+	}
+}
