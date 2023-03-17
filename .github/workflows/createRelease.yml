@@ -55,7 +55,7 @@ jobs:
       - name: Deploy to Digital Ocean
         uses: digitalocean/app_action@main
         with:
-          app_name: monkfish-app
+          app_name: ${{ secrets.DIGITALOCEAN_APP_NAME }}
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           images: '[
             {
