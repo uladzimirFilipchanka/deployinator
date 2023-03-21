@@ -27,8 +27,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # GitHub doesn't fetch tags by default
-      - name: Fetch tags
-        run: git fetch --tags origin
+#      - name: Fetch tags
+#        run: git fetch --tags origin
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
