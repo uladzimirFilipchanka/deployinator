@@ -6,11 +6,12 @@ on:
   # trigger on main branch push (direct or via PR merge)
   push:
     branches:
-      - 'main'
+      - 'deploy-aptible'
 
 env:
-  # Flag to disable deploy step
-  DEPLOY_TO_DIGITAL_OCEAN: true
+  # Where to deploy 'digitalocean' or 'aptible'
+  DEPLOY_TARGET: 'aptible'
+  APTIBLE_ENVIRONMENT: 'google-aeb'
 
 # Disable parallel execution
 concurrency: release
@@ -59,7 +60,7 @@ jobs:
       - name: Push Release Tag
         run: git push origin ${{env.RELEASE_VERSION}}
       - name: Deploy to Digital Ocean
-        if: ${{ env.DEPLOY_TO_DIGITAL_OCEAN == 'true' }}
+        if: ${{ env.DEPLOY_TARGET == 'digitalocean' }}
         uses: digitalocean/app_action@main
         with:
           app_name: ${{ secrets.DIGITALOCEAN_APP_NAME }}
@@ -75,3 +76,15 @@ jobs:
               }
             }
           ]'
+      - name: Deploy to Aptible
+        if: ${{ env.DEPLOY_TARGET == 'aptible' }}
+        uses: aptible/aptible-deploy-action@v1
+        with:
+          username: ${{ secrets.APTIBLE_USERNAME }}
+          password: ${{ secrets.APTIBLE_PASSWORD }}
+          environment: ${{ env.APTIBLE_ENVIRONMENT }}
+          app: ${{ env.APTIBLE_APP }}
+          docker_img: ${{ secrets.DOCKERHUB_USERNAME }}/deployinator:${{env.RELEASE_VERSION}}
+#          private_registry_username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          private_registry_password: ${{ secrets.DOCKERHUB_TOKEN }}
+#          config_variables: RELEASE_SHA=${{ github.sha }}
