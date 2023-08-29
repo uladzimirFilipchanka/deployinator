@@ -12,6 +12,7 @@ env:
   # Where to deploy 'digitalocean' or 'aptible'
   DEPLOY_TARGET: 'aptible'
   APTIBLE_ENVIRONMENT: 'google-aeb'
+  APTIBLE_APP: 'deployinator'
 
 # Disable parallel execution
 concurrency: release
